@@ -14,6 +14,8 @@ import Password from 'primevue/password';
 import Button from 'primevue/button';
 import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
+import Drawer from 'primevue/drawer';
+import Avatar from 'primevue/avatar';
 
 import App from './App.vue'
 import router from './router'
@@ -70,5 +72,7 @@ app.component('prime-float-label', FloatLabel);
 app.component('prime-password', Password);
 app.component('prime-button', Button);
 app.component('prime-toast', Toast);
+app.component('prime-drawer', Drawer);
+app.component('prime-avatar', Avatar);
 
 app.mount('#app')
