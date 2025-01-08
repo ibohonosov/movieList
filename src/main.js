@@ -52,7 +52,7 @@ const MyPreset = definePreset(Aura, {
 
 const app = createApp(App)
 
-app.use(createPinia())
+app.use(createPinia());
 app.use(PrimeVue, {
   theme: {
     preset: MyPreset,
@@ -65,7 +65,7 @@ app.use(PrimeVue, {
     }
   }
 });
-app.use(router)
+app.use(router);
 app.use(ToastService);
 app.component('prime-input', InputText);
 app.component('prime-float-label', FloatLabel);

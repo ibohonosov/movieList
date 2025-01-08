@@ -1,6 +1,5 @@
 <script setup>
 import {computed, ref} from "vue";
-// import {getAuth, createUserWithEmailAndPassword} from 'firebase/auth'
 import {useRouter} from "vue-router";
 import {useAuthStore} from "@/stores/Auth.js";
 import { useToast } from 'primevue/usetoast';
@@ -30,11 +29,9 @@ const sign = async () => {
   try {
     if (isLogin.value) {
       await authStore.signIn(email.value, password.value);
-      // await router.push('/');
     }
     else {
       await authStore.signUp(email.value, password.value, login.value);
-
     }
     await router.push('/');
   } catch (error) {

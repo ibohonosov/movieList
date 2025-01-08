@@ -5,18 +5,22 @@ import {
   getAuth,
   updateProfile,
   signInWithEmailAndPassword,
-  signOut
+  signOut,
+  onAuthStateChanged,
 } from "firebase/auth";
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null);
   const auth = getAuth();
   const saveUserData = (userInfo) => {
-    return user.value = {
+    user.value = {
       uid: userInfo.uid,
       email: userInfo.email,
       login: userInfo.displayName
     }
+  }
+  const clearUserData = () => {
+    user.value = {};
   }
   const signUp = async (email, password, login) => {
     try {
@@ -26,12 +30,7 @@ export const useAuthStore = defineStore('auth', () => {
       await updateProfile(userInfo, {displayName: login});
 
       saveUserData(userInfo);
-      // user.value = {
-      //   uid: userInfo.uid,
-      //   email: userInfo.email,
-      //   login: userInfo.displayName
-      // };
-      // console.log(user.value);
+
     } catch (error) {
       console.log(error);
     }
@@ -41,14 +40,29 @@ export const useAuthStore = defineStore('auth', () => {
       const userCredential = await signInWithEmailAndPassword(auth ,email, password);
       const userInfo = userCredential.user
       saveUserData(userInfo);
+      console.log(auth)
     } catch (error) {
       console.log(error.code);
       throw error;
     }
   }
+  const authListener = () => {
+    return new Promise((resolve, reject) => {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          saveUserData(user);
+        }
+        else {
+          clearUserData();
+        }
+        resolve();
+      })
+    })
+  }
+  const isLoggedIn = () => !!user.value;
   const logout = async () => {
     await signOut(getAuth())
-    user.value = null;
+    clearUserData()
   }
-  return { user, signUp, signIn, logout };
+  return { user, signUp, signIn, logout, authListener, isLoggedIn };
 })
