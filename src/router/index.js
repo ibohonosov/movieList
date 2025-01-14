@@ -25,9 +25,12 @@ const router = createRouter({
     // },
   ],
 })
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
-  if (to.meta.requiresAuth && !authStore.isLoggedIn()) {
+
+  if (authStore.user === null) await authStore.authListener();
+  console.log(authStore.user);
+  if (to.meta.requiresAuth && !authStore.user) {
     next('/auth');
   } else {
     next();
